@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+	crossorigin="anonymous">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+	crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Insert title here</title>
+</head>
+<body>
+	<header th:fragment="header">
+		<div class="p-2 bg-danger bg-opacity-75">
+			<div
+				class="d-flex text-align-center justify-content-between">
+				<div class="">
+					<a href="/cart/mycart/" class="text-decoration-none text-white"><i class="bi bi-cart3 m-0 p-0" href="/cart/mycart/"  style="color:white" ></i></a> 
+<!-- 					<span text="    ">&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</span>
+ -->					  
+				</div>
+				<div class="d-flex text-align-center justify-content-between">
+					<a href="/main" class="text-decoration-none text-white">Logo</a>
+				</div>
+				<div class="opacity-100">
+					<!-- 로그인 후 -->
+					<!-- # = 마이페이지 -->
+					<!-- <a href="/myPage" th:if="${session.userId} != null"
+						class="text-white me-4 mt-5 text-decoration-none"
+						th:text="|${session.userId}|" title="마이페이지로 가기"></a> -->
+					<div th:if="${session.userId} == ${user.userId}"
+						th:each="user : ${user}">
+						<input type="hidden" id="seq" name="seq" th:value="${user.seq}">
+						<input type="hidden" id="userId" name="userId"
+							th:value="${session.userId}"> <input type="hidden"
+							id="method" name="_method">
+					
+					<div class="dropdown">
+						<a
+							class="btn dropdown-toggle text-white text-decoration-none"
+							href="#" th:if="${session.userId} != null"
+							th:text="|${session.userId}|" title="마이페이지로 가기" role="button"
+							id="dropdownMenuLink" data-bs-toggle="dropdown"
+							aria-expanded="false"></a>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+							<li><a class="dropdown-item" type="button" id="edit-btn" href="/userEdit/" th:attrappend="href=${user.seq}">회원정보수정</a>
+							</li>
+
+							<li><a class="dropdown-item" type="button" id="old-list-btn" href="/orderCheck">주문내역</a></li>
+							<li><a class="dropdown-item" type="button" id="cart-btn" href="/cart/mycart/">장바구니</a></li>
+							<li><a class="dropdown-item" type="button" id="kong-btn" href="/notice">공지사항</a></li>
+							<li><a class="dropdown-item" type="button" id="logout" href="/logout">로그아웃</a></li>
+						</ul>
+					</div>
+					</div>
+					<!-- 로그인 전-->
+					<a class="text-white me-4 mt-5 text-decoration-none"
+						th:unless="${session.userId} != null" th:text="로그인"
+						th:href="@{/login}"></a>
+					<!-- 				로그인 후
+				<a class="text-white me-4 mt-5 text-decoration-none"
+					th:if="${session.userId} != null" th:text="로그아웃"
+					th:href="@{/logout}"></a> -->
+				</div>
+			</div>
+		</div>
+	</header>
+</body>
+</html>

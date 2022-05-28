@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <script src="./js/bootstrap.bundle.js"></script>
+  
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800&amp;subset=korean" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+ <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+<script>
+	window.addEventListener("DOMContentLoaded", function() {
+		var btnList = document.querySelector("#btn-cancel");
+		btnList.addEventListener("click", function() {
+			location.href = "/cart/mycart/";
+		});
+
+		// 		var btnEdit = document.querySelector("#btn-payment");
+		// 		btnEdit.addEventListener("click", function() {
+
+		// 			var frm = document.frm;
+		// 			frm.method = "post";
+		// 			frm.action = "/cart/order/success.do";
+		// 			frm.submit();
+		// 		});
+
+		// 		$(document).ready(function() {
+		// 			/*<![CDATA[*/ var menu = /*[[ ${cartList} ]]*/
+		// 		// 장바구니 추가 버튼
+		// 			$("#btn-payment").on("click", function(e){
+		// 		//		menu.menuCount = $("#numBox").text();
+		// //					cartIdx;
+		// //					menuSeq;
+		// //					menuCount;
+		// //					menuName;
+		// //					menuPrice;
+		// //					totalPrice;
+		// //					menuStoredFilePath;
+
+		// 				var datas = {menuSeq: menu.menuSeq, menuCount: menu.menuCount, menuPrice: menu.menuPrice ,menuName:menu.menuName}
+
+		// 				$.ajax({
+		// 					url: '/cart/order/success.do',
+		// 					type: 'POST',
+		// 					data: datas,
+		// 					success: function(result){
+		// 						alert("장바구니추가");
+		// 					//	location.href="/menu";
+		// 					//	cartAlert(result);
+		// 					},
+		// 					error: function() {
+		// 						alert("ajax 통신 오류 발생");
+		// 					}
+		// 				});
+		// 			});
+		// 		});
+
+	});
+</script>
+<style>
+ .bi-cart3{
+    font-size: 25px;
+    line-height: 30px;
+    
+}
+</style>
+</head>
+<body>
+	<header>
+		<div id="header" th:include="/layout/header :: header"></div>
+	</header>
+
+		<main>
+			<div class="container mt-3 py-0 px-1">
+				<div class="py-0 my-0 rounded">
+					<h1 class="text-center">주문/결제</h1>
+				</div>
+			</div>
+			
+	<div class="row">
+		<div class="col-sm-6 mx-auto px-5 p-3 border rounded">
+			<form name="frm" action="/cart/order/success.do" method="get"
+				class="order_form">
+
+				<div>
+				<p class="text-muted lead font-weight-bold m-0">매장명</p>
+					<div class="form-floating mt-0 my-1">
+								<input type="text" class="form-control p-1" style="height:43px;" id="user-store"
+								name="user-store" th:value="${userInfo.userStore}" readonly>
+							
+					</div>
+				
+					<!--     		<div th:if="${userInfo.userId} =! 'N'">    -->
+					<p class="text-muted lead font-weight-bold m-0">전화번호</p>
+					<div class="form-floating mt-0 my-1">
+								<input type="text" class="form-control p-1" style="height:43px;" id="user-phone"
+								name="user-phone" th:value="${userInfo.userPhone}" readonly>
+							
+					</div>
+					<p class="text-muted lead font-weight-bold m-0">
+						배송주소
+						<!-- <button class="btn btn-outline-secondary btn-sm">검색</button> -->
+					</p>
+					<div class="form-floating my-3 mt-0 my-1">
+					<input type="text" class="form-control p-1" style="height:43px;" id="user-addr1"
+								name="userAddr1" th:value="${userInfo.userAddr}" readonly>
+								
+						
+					<div class="form-floating my-3">
+						<input type="text" class="form-control p-1" style="height:43px;" id="user-addr2"
+								name="userAddr2" th:value="${userInfo.userAddrDetail}" readonly>
+					
+						
+
+					</div>
+
+
+				</div>
+
+	
+
+				<div class="row">
+					<div class="mx-auto my-3 px-5">
+					<h5 class="text-center"> 결제수단</h5>
+						
+						<div class="d-flex text-align-center justify-content-between"> 
+						
+						<div class="form-check">
+						
+							<input class="form-check-input" type="radio"
+								name="flexRadioDefault" id="flexRadioDefault1" checked>
+							<label class="form-check-label" for="flexRadioDefault1">
+								신용카드 </label>
+						</div>
+						
+						
+						<div class="form-check" style="margin-right:15px">
+							<input class="form-check-input" type="radio"
+								name="flexRadioDefault" id="flexRadioDefault2"> <label
+								class="form-check-label" for="flexRadioDefault2"> 계좌이체 </label>
+						</div>
+						
+						</div>
+						
+						<div class="d-flex text-align-center justify-content-between">
+						
+						
+						<div class="form-check">
+							<input class="form-check-input" type="radio"
+								name="flexRadioDefault" id="flexRadioDefault3"> <label
+								class="form-check-label" for="flexRadioDefault3"> 무통장결제
+							</label>
+						</div>
+						
+						<div class="form-check">
+							<input class="form-check-input" type="radio"
+								name="flexRadioDefault" id="flexRadioDefault4"> <label
+								class="form-check-label" for="flexRadioDefault4"> 휴대폰결제
+							</label>
+						</div>
+						
+						 
+						</div>
+						
+						
+					</div>
+				</div>
+				<div class="cart_info_td">
+					<div class="card my-3 col-6 mx-auto" style="width: 15rem;">
+						<div class="card-body p-3">
+							상품 금액 <input type="text" class="form-control p-1" id="bs-cost"
+								name="bsCost" th:value="${priceInfo.sumTotal}+'원'" readonly>
+							
+							
+							<div> 배송비 	</div>
+							<input type="text" class="form-control p-1" value="2000원" readonly>
+							 
+							 </div> 
+							<!-- 								<input type="text" class="form-control" id="bs-cost" -->
+							<!-- 									name="bsCost" th:value="${cartsum.dsCost}" readonly> -->
+						
+						<div class="card-footer">
+							총 합계 금액 <input type="text" class="form-control p-1" id="final-cost"
+								name="finalCost" th:value="${priceInfo.finalCost}" readonly>
+						</div>
+						<input type="hidden" class="cartId" value="${cartList.cartId}+'원'">
+
+
+
+
+					</div>
+				</div>
+				<div class="clearfix my-3">
+			<button type="button" class="btn btn-secondary float-start"
+				id="btn-cancel">취소하기</button>
+			<button type="submit" class="btn btn-warning float-end"
+				id="btn-payment">결제하기</button>
+		</div>
+			</form>
+
+
+		</div>
+
+	</div>
+
+
+
+</main>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.team2.mapper.OrderMapper">	
+	
+	<!-- map -->
+	<!--<insert id="mapinsert" parameterType="com.bitc.team2.dto.OrderDto" useGeneratedKeys="true">
+		<![CDATA[
+			INSERT INTO
+				user (user_addr, user_addr_detail)
+			VALUES
+				(#{userAddr}, #{userAddrDetail})
+		]]>
+	</insert>-->
+	
+	<!-- store 위치 저장 -->	
+	<update id="updateStore" parameterType="String">
+		<![CDATA[ 
+			update
+				user
+			set
+				user_store = #{storeName}
+			where 
+				user_id = #{userId}				
+		]]>
+	</update>
+	
+	
+	
+	<!-- 주문자 정보 확인 주문자 정보 부분 -->
+	<select id="selectUserList" resultType="com.bitc.team2.dto.UserDto">
+		
+		<![CDATA[ 
+			SELECT
+				*
+			FROM
+				user
+		]]>
+	</select>
+	<select id="selectMenuList" resultType="com.bitc.team2.dto.CartDto">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				menu_cart
+			where
+				user_id = #{userId}
+		]]>
+	</select>
+</mapper>

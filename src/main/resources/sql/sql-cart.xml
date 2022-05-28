@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis/org//DTD Mapper 3.0//EN"
+"http:/mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.team2.mapper.CartMapper">
+
+<!-- 카트 추가 -->
+	<insert id="addCart"  parameterType="com.bitc.team2.dto.CartDto">
+		
+		<![CDATA[
+		insert into menu_cart( menu_seq, menu_count,menu_name,menu_price, total_price , menu_stored_file_path,user_id)
+		values(#{menuSeq}, #{menuCount},#{menuName}, #{menuPrice},  #{totalPrice} , #{menuStoredFilePath},#{userId})
+		
+	]]>
+	</insert>
+<!--	
+<select id="openCartList" resultType="com.bitc.team2.dto.CartDto">
+		
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				menu_cart
+			
+			
+		]]>
+	</select>-->
+		
+	
+	
+			<!-- 주문데이터 -->
+	<select id="cartOrder" parameterType="String" resultType="com.bitc.team2.dto.CartDto">
+		
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				menu_cart
+			where 
+				user_id = #{userId}
+				
+			and 
+				deleted_yn ='N'
+			and 
+				pay_success ='N'
+				
+		]]>
+	</select>
+
+	<!-- 유저정보 -->
+<select id="getUser" parameterType="String" resultType="com.bitc.team2.dto.UserDto">
+		
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				user
+			where 
+				user_id = #{userId}
+			
+				
+		]]>
+
+</select>
+
+  <!-- 카트보기 -->
+	<select id="getCart" parameterType="String" resultType="com.bitc.team2.dto.CartDto">
+		
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				menu_cart
+			where 
+				user_id = #{userId}
+				
+			and 
+				deleted_yn ='N'
+				and 
+				pay_success ='N'
+				
+		]]>
+	</select>
+	 
+	<!-- 주문내역 -->
+		<select id="getSuccessList" parameterType="String" resultType="com.bitc.team2.dto.CartDto">
+		
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				menu_cart
+			where 
+				user_id = #{userId}
+				
+			and 
+				deleted_yn ='N'
+				and 
+				pay_success ='Y'
+			ORDER BY
+				cart_id DESC
+				
+		]]>
+	</select>
+	
+<!-- 결제 데이터 입력 -->	
+<!--	<insert id="paySuccess"  parameterType="com.bitc.team2.dto.CartDto">
+		
+		<![CDATA[
+		insert into order( cart_id )
+		values ( #{cartId} )
+		
+	]]>
+	</insert>-->
+	
+	<update id="paySuccess" parameterType="com.bitc.team2.dto.CartDto">
+		<![CDATA[
+			UPDATE
+				menu_cart
+			SET
+			 pay_success = 'Y'
+			 
+			where 
+				user_id = #{userId}
+			and
+			    deleted_yn = 'N'
+		]]>
+	</update>
+	
+	
+	<update id="paySuccess1" parameterType="com.bitc.team2.dto.CartDto">
+		<![CDATA[
+			UPDATE
+				menu_cart
+			SET
+				order_date = #{orderDate}
+			 
+			where 
+				user_id = #{userId}
+			and
+			    pay_success = 'N'
+		]]>
+	</update>
+	
+	
+	
+		<!--가격총합  -->
+
+	 <select id="sumMoney" parameterType="String" resultType="int">
+	 
+       	<![CDATA[
+        SELECT SUM(total_price) 
+        FROM menu_cart
+        WHERE 
+            user_id = #{userId}
+        ]]>
+        
+    </select>
+	
+	
+	<!--삭제 -->
+	
+	<update id="deleteCart" parameterType="int">
+		<![CDATA[
+			UPDATE
+				menu_cart
+			SET
+				deleted_yn = 'Y'
+			WHERE
+				cart_id = #{cartId}
+		]]>
+	</update>
+	
+			
+</mapper>

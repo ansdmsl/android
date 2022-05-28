@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+<title>매장 찾기</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9bf24c24f3d0bed9719bca2e83188be5&libraries=services,clusterer,drawing"></script>
+
+<script>
+	var infowindow = new kakao.maps.InfoWindow({zIndex:1}); // 마커를 저장할 변수
+	var ps = new kakao.maps.services.Places(); // 검색 결과를 저장하는 변수
+	var map; // 카카오 지도를 불러와서 저장할 변수
+	
+	var myModal;
+
+	// 검색어 검색 시 호출되는 함수
+	function placesSearchCB (data, status, pagination) {
+		if (status === kakao.maps.services.Status.OK) {
+		
+			// 카카오를 통해서 검색된 내용을 바탕으로 지도 좌표 설정
+			var bounds = new kakao.maps.LatLngBounds();
+			
+			for (var i=0; i<data.length; i++) {
+				displayMarker(data[i]);
+				bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+			}
+			
+			// 지도 범위 재설정
+			map.setBounds(bounds);
+		}
+	}
+
+	// 지도에 마커를 표시하는 함수
+	function displayMarker(place) {
+		// 마커를 생성하고 지도에 표시
+		var marker = new kakao.maps.Marker({
+			map: map,
+			position: new kakao.maps.LatLng(place.y, place.x) 
+		});
+
+		// 마커에 클릭이벤트를 등록
+		kakao.maps.event.addListener(marker, 'click', function() {
+			// 마커를 클릭하면 장소명이 인포윈도우에 표출
+			infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+			//infowindow.open(map, marker);
+			// 모달창 출력하는 것이 아래에 추가되어야 함*************************************///////////////////////////
+			
+			var placeName = document.querySelector("#place-name");
+			placeName.innerText = place.place_name;
+			
+			myModal.show();
+
+			console.log(place);
+		});
+	}
+
+	// HTML 로드 후 자바스크립트 실행
+	window.addEventListener("DOMContentLoaded", function() {
+		var mapContainer = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+		var mapOption = { //지도를 생성할 때 필요한 기본 옵션
+// 				35.155958, 129.05933  // 서면의 GPS좌표
+				center: new kakao.maps.LatLng(35.155958, 129.05933), //지도의 중심좌표.
+				level: 3 //지도의 레벨(확대, 축소 정도)
+			};
+		
+		// 지도 생성
+		map = new kakao.maps.Map(mapContainer, mapOption);
+
+		// 버튼 이벤트 생성
+		var btnSearch = document.querySelector("#search");
+		btnSearch.addEventListener("click", function() {
+			// 검색 창에서 글자 불러오기
+			var keyword = document.querySelector("#search-keyword").value;
+			// 불러운 글자로 검색하기
+			ps.keywordSearch(keyword, placesSearchCB);
+		});
+		
+		myModal = new bootstrap.Modal(document.getElementById('div-modal'), {keyboard: false});
+		
+		$("#btn-edit").on("click", function() {
+			var val = $("#place-name").text();
+			$.ajax({
+				url: "/store/storeName",
+				type: "POST",
+				data: {storeName : val},
+				success: function(data) {
+					alert("매장이 선택되었습니다.");
+					location.href="/menu";
+				},
+				error: function() {
+					alert("오류 발생");
+				}
+			});
+// 			$("#method").val("PUT");
+// 			var frm = $("#frm")[0];
+// 			frm.action = "/menu";
+// 			frm.submit();
+		});
+	});
+</script>
+</head>
+<body>
+	<header>
+		<div id="header" th:include="layout/header :: header"></div>
+		<div class="container mt-4">
+			<h3 class="p-1 text-center border bg-primary bg-opacity-25 text-white">매장을 선택해주세요</h3>
+		</div>
+	</header>
+	
+	
+	<div class="container">
+		<div class="row mt-5">
+			<div class="col-sm">
+				<!-- 지도 영역 -->
+				<div id="map" class="mw-100" style="height:350px;"></div>
+				<!-- 검색바 영역 -->
+				<div class="input-group my-3">
+					<input type="text" class="form-control" id="search-keyword" placeholder="Search" value="서면">
+					<button class="btn btn-success" id="search">검색</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<form id="frm" action="/menu" method="GET">
+		<div id="div-modal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">매장 선택</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" class="form-control" name="userStore">
+						<p id="place-name"></p>
+					</div>
+					
+					<div class="modal-footer">
+						<button type="button" id="btn-edit" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</form>
+	
+
+</body>
+</html>

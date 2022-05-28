@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis/org//DTD Mapper 3.0//EN"
+"http:/mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.team2.mapper.MenuMapper">
+
+	<!-- 메인 화면 -->
+
+<!--	<select id="selectJrList" resultType="com.bitc.dto.ProjectDto">
+		
+		<![CDATA[ 
+			SELECT
+				product_idx, product_name, product_price, product_category_idx
+			FROM
+				product		
+				
+			ORDER BY
+				product_category_idx
+		]]>
+	</select>-->
+	
+	<!-- 메뉴별 화면 -->
+	<select id="selectMenuList"  resultType="com.bitc.team2.dto.MenuDto">
+	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				menu_list
+			WHERE
+			 menu_category = "1"
+		
+			
+		
+		
+		]]>
+		
+	</select>
+	
+	<select id="selectMenuList2"  resultType="com.bitc.team2.dto.MenuDto">
+	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				menu_list
+			WHERE
+			 menu_category = "2"
+		
+			
+		
+		]]>
+		
+	</select>
+	
+	<select id="selectMenuList3"  resultType="com.bitc.team2.dto.MenuDto">
+	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				menu_list
+			WHERE
+			 menu_category = "3";
+			
+		
+		]]>
+		
+	</select>
+	
+	<select id="selectMenuDetail" parameterType="int" resultType="com.bitc.team2.dto.MenuDto">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				menu_list
+			WHERE
+				menu_seq = #{menu_seq}
+		]]>
+	</select>
+	
+	
+
+
+		
+</mapper>
